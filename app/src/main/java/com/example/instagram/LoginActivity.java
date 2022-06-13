@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser(username, password);
             }
         });
+
     }
 
     private void loginUser(String username, String password) {
