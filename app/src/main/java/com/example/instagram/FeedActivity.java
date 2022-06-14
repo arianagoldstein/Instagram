@@ -3,6 +3,7 @@ package com.example.instagram;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +23,15 @@ public class FeedActivity extends AppCompatActivity {
 
     public static final String TAG = "FeedActivity";
 
+    private SwipeRefreshLayout swipeContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+        // looking up the views in the layout
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         rvPosts = findViewById(R.id.rvPosts);
 
         // initializing list of posts and the adapter
@@ -41,6 +46,20 @@ public class FeedActivity extends AppCompatActivity {
 
         // query posts from the database
         queryPosts();
+
+        // setting up refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPosts();
+            }
+        });
+
+        // configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     // method to query our Parse server to return the most recent 20 posts
@@ -61,6 +80,8 @@ public class FeedActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
+                swipeContainer.setRefreshing(false);
+
                 // check for error/success
                 if (e != null) {
                     Log.e(TAG, "Issue getting posts.", e);
@@ -72,8 +93,10 @@ public class FeedActivity extends AppCompatActivity {
                 }
 
                 // save these posts to the list and notify the adapter to update
+                allPosts.clear();
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
+
             }
         });
     }

@@ -48,7 +48,7 @@ public class ComposeActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         etDescription = findViewById(R.id.etDescription);
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
-        ivPostImage = findViewById(R.id.ivPostImage);
+        ivPostImage = findViewById(R.id.ivPostImageCompose);
         btnSubmit = findViewById(R.id.btnSubmit);
 
         // setting a listener for the logout button

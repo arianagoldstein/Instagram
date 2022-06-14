@@ -1,7 +1,7 @@
 package com.example.instagram;
 
 import android.content.Context;
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -51,7 +53,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return posts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+
+    // clean all elements of the recycler
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // add a list of items
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // declaring XML elements
         private TextView tvUsername;
@@ -61,8 +76,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivImage = itemView.findViewById(R.id.ivImage);
+            ivImage = itemView.findViewById(R.id.ivPostImageFeed);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+
+            itemView.setOnClickListener(this);
         }
 
         // binds the post data to the elements in the layout
@@ -76,6 +93,28 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
 
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            // get item position
+            int position = getAdapterPosition();
+
+            // check if the position is valid
+            if (position != RecyclerView.NO_POSITION) {
+                // accessing post at this position
+                Post post = posts.get(position);
+
+                // create intent for the new activity
+                Intent intent = new Intent(context, PostDetailsActivity.class);
+
+                // serialize the movie using Parceler, use its short name as a key
+                intent.putExtra("post", post);
+
+                // show the activity
+                context.startActivity(intent);
+            }
         }
     }
 }
