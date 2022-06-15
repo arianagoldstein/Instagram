@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // checking if the user is already logged in
         if (ParseUser.getCurrentUser() != null) {
-            goFeedActivity();
+            goMainActivity();
         }
 
         // finding the XML elements and instantiating them
@@ -61,14 +61,14 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 // if the action succeeds, then the exception e will be null and we can start the main activity
-                goFeedActivity();
+                goMainActivity();
                 Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void goFeedActivity() {
-        Intent i = new Intent(this, FeedActivity.class);
+    private void goMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
     }

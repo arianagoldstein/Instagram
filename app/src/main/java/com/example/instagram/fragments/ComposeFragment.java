@@ -1,23 +1,30 @@
-package com.example.instagram;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
+package com.example.instagram.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.instagram.BitmapScaler;
+import com.example.instagram.Post;
+import com.example.instagram.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -25,11 +32,12 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 
-public class ComposeActivity extends AppCompatActivity {
+public class ComposeFragment extends Fragment {
+
+    public static final String TAG = "ComposeFragment";
 
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-    public static final String TAG = "ComposeActivity";
-
+    private static final int RESULT_OK = -1;
     private Button btnLogout;
     private EditText etDescription;
     private Button btnCaptureImage;
@@ -38,18 +46,34 @@ public class ComposeActivity extends AppCompatActivity {
     private File photoFile;
     public String photoFileName;
 
+    public ComposeFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
 
-        // instantiating XML elements
-        btnLogout = findViewById(R.id.btnLogout);
-        etDescription = findViewById(R.id.etDescription);
-        btnCaptureImage = findViewById(R.id.btnCaptureImage);
-        ivPostImage = findViewById(R.id.ivPostImageCompose);
-        btnSubmit = findViewById(R.id.btnSubmit);
+    }
+
+    // set up what layout file to use for this fragment
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_compose, container, false);
+    }
+
+    // called soon after onCreateView, set up all the views
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        btnLogout = view.findViewById(R.id.btnLogout);
+        etDescription = view.findViewById(R.id.etDescription);
+        btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
+        ivPostImage = view.findViewById(R.id.ivPostImageCompose);
+        btnSubmit = view.findViewById(R.id.btnSubmit);
 
         // setting a listener for the logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +84,6 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
-        // queryPosts();
 
         // setting a listener for the submit button to create a post
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -71,13 +94,13 @@ public class ComposeActivity extends AppCompatActivity {
 
                 // can't post with an empty description
                 if (description.isEmpty()) {
-                    Toast.makeText(ComposeActivity.this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // can't post without a picture
                 if (photoFile == null || ivPostImage.getDrawable() == null) {
-                    Toast.makeText(ComposeActivity.this, "There is no image!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "There is no image!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -94,6 +117,7 @@ public class ComposeActivity extends AppCompatActivity {
                 launchCamera();
             }
         });
+
     }
 
     // launches implicit intent to open the phone's camera and take a photo for the post
@@ -108,11 +132,11 @@ public class ComposeActivity extends AppCompatActivity {
         // can't access the file
 
         // wrap File object into a content provider, make our application a file provider
-        Uri fileProvider = FileProvider.getUriForFile(ComposeActivity.this, "com.codepath.fileprovider.ParseApplication", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.ParseApplication", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // checking if there is an app on this phone that can handle this intent
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             Log.i(TAG, "Going to phone camera app to take a picture");
             // start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -124,7 +148,7 @@ public class ComposeActivity extends AppCompatActivity {
     // getting the image back from the user
     // invoked when the camera app returns to the Instagram application
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // if the photo capture was successful, we can load the image onto the page as a preview for the user
@@ -139,7 +163,7 @@ public class ComposeActivity extends AppCompatActivity {
                 // load the taken image into a preview
                 ivPostImage.setImageBitmap(resizedBitmap);
             } else { // result was a failure
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -147,7 +171,7 @@ public class ComposeActivity extends AppCompatActivity {
     // helper function to get a URI for the image file
     private File getPhotoFileUri(String fileName) {
 
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
@@ -172,7 +196,7 @@ public class ComposeActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error while saving", e);
-                    Toast.makeText(ComposeActivity.this, "Error while saving", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
                 }
                 // if we get here, the post was saved successfully
                 Log.i(TAG, "Post added successfully!");
@@ -184,4 +208,5 @@ public class ComposeActivity extends AppCompatActivity {
         });
 
     }
+
 }
