@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.instagram.EndlessRecyclerViewScrollListener;
 import com.example.instagram.Post;
 import com.example.instagram.PostsAdapter;
 import com.example.instagram.R;
@@ -32,6 +33,8 @@ public class FeedFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -67,16 +70,17 @@ public class FeedFragment extends Fragment {
         rvPosts.setAdapter(adapter);
 
         // set the layout manager on the recyclerview
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(llm);
 
         // query posts from the database
-        queryPosts();
+        queryPosts(0);
 
         // setting up refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryPosts();
+                queryPosts(0);
             }
         });
 
@@ -85,10 +89,20 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        // setting up endless scrolling
+        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryPosts(allPosts.size());
+            }
+        };
+
+        rvPosts.addOnScrollListener(scrollListener);
     }
 
     // method to query our Parse server to return the most recent 20 posts
-    protected void queryPosts() {
+    protected void queryPosts(int i) {
         // specifying the type of data we want to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
@@ -96,7 +110,8 @@ public class FeedFragment extends Fragment {
         query.include(Post.KEY_USER);
 
         // limit query to latest 20 items
-        query.setLimit(20);
+        query.setLimit(5);
+        query.setSkip(i);
 
         // order posts by the order they were created with the newest first
         query.addDescendingOrder(Post.KEY_CREATED_AT);

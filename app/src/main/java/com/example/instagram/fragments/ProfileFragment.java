@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ProfileFragment extends FeedFragment {
     @Override
-    protected void queryPosts() {
-        super.queryPosts();
+    protected void queryPosts(int i) {
+        super.queryPosts(i);
 
         // specifying the type of data we want to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
