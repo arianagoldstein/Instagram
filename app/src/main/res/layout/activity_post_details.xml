@@ -14,6 +14,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_person_24"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -43,32 +44,95 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImageDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetails" />
 
     <TextView
         android:id="@+id/tvDescriptionDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.104"
         app:layout_constraintStart_toEndOf="@+id/tvUsernameDetailsBottom"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImageDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetails" />
 
     <TextView
         android:id="@+id/tvCreatedAtDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsernameDetailsBottom" />
+        app:layout_constraintTop_toBottomOf="@+id/rvComments" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDetails"
+        android:layout_width="0dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImageDetails">
+
+        <ImageButton
+            android:id="@+id/ibLikeDetails"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/emptyheart" />
+
+        <ImageButton
+            android:id="@+id/ibCommentDetails"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/comment" />
+
+        <ImageButton
+            android:id="@+id/ibSendDetails"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/send" />
+
+        <ImageButton
+            android:id="@+id/ibSaveDetails"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="250dp"
+            android:background="@drawable/save" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvThreeDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="28dp"
+        android:text=". . ."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toEndOf="@+id/tvUsernameDetailsTop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="412dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

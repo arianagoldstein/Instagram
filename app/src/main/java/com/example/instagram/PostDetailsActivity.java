@@ -1,19 +1,31 @@
 package com.example.instagram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 
 import org.parceler.Parcels;
 
 import java.util.Date;
+import java.util.List;
 
 public class PostDetailsActivity extends AppCompatActivity {
+
+    public static final String TAG = "PostDetailsActivity";
 
     private ImageView ivProfileImage;
     private TextView tvUsernameDetailsTop;
@@ -21,6 +33,11 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView tvUsernameDetailsBottom;
     private TextView tvDescriptionDetails;
     private TextView tvCreatedAtDetails;
+
+    private ImageButton ibLikeDetails;
+    private ImageButton ibCommentDetails;
+    private RecyclerView rvComments;
+    private CommentsAdapter adapter;
 
     private Post post;
 
@@ -35,9 +52,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsernameDetailsBottom = findViewById(R.id.tvUsernameDetailsBottom);
         tvDescriptionDetails = findViewById(R.id.tvDescriptionDetails);
         tvCreatedAtDetails = findViewById(R.id.tvCreatedAtDetails);
+        ibLikeDetails = findViewById(R.id.ibLikeDetails);
+        ibCommentDetails = findViewById(R.id.ibCommentDetails);
+        rvComments = findViewById(R.id.rvComments);
 
         // unwrapping the Parcel so we can populate the details page with this post
-        // post = (Post) Parcels.unwrap(getIntent().getParcelableExtra(Post.class.getSimpleName()));
         post = getIntent().getParcelableExtra("post");
 
         // populating the details page with this post's information
@@ -55,5 +74,60 @@ public class PostDetailsActivity extends AppCompatActivity {
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivPostImageDetails);
         }
+
+        // setting an onclick listener for the comment button
+        ibCommentDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PostDetailsActivity.this, CommentActivity.class);
+                i.putExtra("post", post);
+                startActivity(i);
+            }
+        });
+
+        // creating a comments adapter to show comments for this post
+        adapter = new CommentsAdapter();
+        rvComments.setLayoutManager(new LinearLayoutManager(this));
+        rvComments.setAdapter(adapter);
+
+        refreshComments();
     }
+
+    // runs when we come back to the details activity after posting a new comment
+    // when we say "finish" on a future activity and come back to this one
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        refreshComments();
+    }
+
+    // this function queries the database for the comments for this post
+    void refreshComments() {
+        // we want to load all of the comments for this post
+        ParseQuery<Comment> query = new ParseQuery<Comment>("Comment");
+
+        // getting comments specifically for this post
+        query.whereEqualTo(Comment.KEY_POST, post);
+
+        // ordering by how recently the comment was made
+        query.orderByDescending("createdAt");
+        query.include(Comment.KEY_AUTHOR);
+
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> objects, ParseException e) {
+                // if the query for the comments is unsuccessful, we will get an exception
+                if (e != null) {
+                    Log.e(TAG, "Failed to get comments", e);
+                    return;
+                }
+                // we clear before adding these comments so we don't see duplicate comments
+                adapter.mComments.clear();
+                adapter.mComments.addAll(objects);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
 }

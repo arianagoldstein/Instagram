@@ -19,12 +19,52 @@
     <ImageView
         android:id="@+id/ivPostImageFeed"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:layout_marginTop="12dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@+id/tvUsername"
         app:srcCompat="@drawable/ic_launcher_background"
         tools:layout_editor_absoluteX="0dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutFeed"
+        android:layout_width="0dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImageFeed">
+
+        <ImageButton
+            android:id="@+id/ibLikeFeed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/emptyheart" />
+
+        <ImageButton
+            android:id="@+id/ibCommentFeed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/comment" />
+
+        <ImageButton
+            android:id="@+id/ibSendFeed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/send" />
+
+        <ImageButton
+            android:id="@+id/ibSaveFeed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="250dp"
+            android:background="@drawable/save" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvDescription"
@@ -32,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImageFeed"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutFeed"
         tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
