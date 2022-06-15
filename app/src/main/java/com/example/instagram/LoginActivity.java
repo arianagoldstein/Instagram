@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
+    private Button btnSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSignup = findViewById(R.id.btnSignup);
 
         // setting a listener for the login button
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +51,39 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // setting a listener for the signup button
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick signup button");
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                signupUser(username, password);
+            }
+        });
+
+    }
+
+    private void signupUser(String username, String password) {
+        Log.i(TAG, "Attempting to sign up user " + username);
+
+        // creating a new user to add to the database
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                // if the signup is not successful, we'll get an exception
+                if (e != null) {
+                    Log.e(TAG, "Issue with login: ", e);
+                    return;
+                }
+                // if the action succeeds, then the exception e will be null and we can start the main activity
+                goMainActivity();
+            }
+        });
     }
 
     private void loginUser(String username, String password) {
@@ -62,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 // if the action succeeds, then the exception e will be null and we can start the main activity
                 goMainActivity();
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
     }
