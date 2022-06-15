@@ -29,9 +29,9 @@ public class FeedFragment extends Fragment {
     public static final String TAG = "FeedFragment";
 
     private RecyclerView rvPosts;
-    private PostsAdapter adapter;
-    private List<Post> allPosts;
-    private SwipeRefreshLayout swipeContainer;
+    protected PostsAdapter adapter;
+    protected List<Post> allPosts;
+    protected SwipeRefreshLayout swipeContainer;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -88,7 +88,7 @@ public class FeedFragment extends Fragment {
     }
 
     // method to query our Parse server to return the most recent 20 posts
-    private void queryPosts() {
+    protected void queryPosts() {
         // specifying the type of data we want to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 

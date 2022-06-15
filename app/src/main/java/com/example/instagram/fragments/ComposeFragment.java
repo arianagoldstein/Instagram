@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.instagram.BitmapScaler;
+import com.example.instagram.LoginActivity;
 import com.example.instagram.Post;
 import com.example.instagram.R;
 import com.parse.ParseException;
@@ -81,6 +82,8 @@ public class ComposeFragment extends Fragment {
             public void onClick(View v) {
                 Log.i(TAG, "onClick logout button");
                 ParseUser.logOut();
+                Intent i = new Intent(getContext(), LoginActivity.class);
+                startActivity(i);
             }
         });
 
