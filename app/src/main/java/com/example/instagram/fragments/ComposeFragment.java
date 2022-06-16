@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.instagram.BitmapScaler;
 import com.example.instagram.LoginActivity;
+import com.example.instagram.MainActivity;
 import com.example.instagram.Post;
 import com.example.instagram.R;
 import com.parse.ParseException;
@@ -47,8 +48,11 @@ public class ComposeFragment extends Fragment {
     private File photoFile;
     public String photoFileName;
 
-    public ComposeFragment() {
+    MainActivity mainActivity;
+
+    public ComposeFragment(MainActivity mainActivity) {
         // Required empty public constructor
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -207,9 +211,12 @@ public class ComposeFragment extends Fragment {
                 // clearing description and image area when post is successfully saved
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);
+                mainActivity.goToFeedFragment();
             }
         });
 
     }
+
+
 
 }
