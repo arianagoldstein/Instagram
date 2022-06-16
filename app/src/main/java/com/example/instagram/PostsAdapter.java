@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,12 +73,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUsername;
         private ImageView ivImage;
         private TextView tvDescription;
+        private TextView tvLikesFeed;
+        private ImageButton ibLikeFeed;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivPostImageFeed);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvLikesFeed = itemView.findViewById(R.id.tvLikesFeed);
+            ibLikeFeed = itemView.findViewById(R.id.ibLikeFeed);
 
             itemView.setOnClickListener(this);
         }
@@ -86,6 +91,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void bind(Post post) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            tvLikesFeed.setText(post.getLikesCount());
+
+            if (post.isLikedByCurrentUser()) {
+                ibLikeFeed.setBackgroundResource(R.drawable.fullheart);
+            } else {
+                ibLikeFeed.setBackgroundResource(R.drawable.emptyheart);
+            }
+
             ParseFile image = post.getImage();
 
             // loading the image into the ImageView only if the image isn't null
