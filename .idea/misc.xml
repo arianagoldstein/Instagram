@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/fragment_feed.xml" value="0.23796296296296296" />
         <entry key="app/src/main/res/layout/item_comment.xml" value="0.29128205128205126" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.21640167236328123" />
-        <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.18306732177734378" />
+        <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/xml/fileprovider.xml" value="0.16944444444444445" />
       </map>
     </option>

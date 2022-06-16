@@ -40,6 +40,16 @@ public class FeedFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // gets triggered every time we come back to the feed fragment
+    @Override
+    public void onResume() {
+        super.onResume();
+        // query posts from the database
+        Log.i(TAG, "onResume");
+        adapter.clear();
+        queryPosts(0);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +83,8 @@ public class FeedFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(llm);
 
-        // query posts from the database
-        queryPosts(0);
+//        // query posts from the database
+//        queryPosts(0);
 
         // setting up refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/action_feed"
-        android:icon="@android:drawable/ic_menu_compass"
+        android:icon="@drawable/home_outline"
         android:title="Feed"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_compose"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/compose"
         android:title="Compose"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"
-        android:icon="@drawable/ic_baseline_person_24"
+        android:icon="@drawable/profile"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>
