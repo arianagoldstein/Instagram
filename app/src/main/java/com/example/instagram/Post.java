@@ -2,6 +2,7 @@ package com.example.instagram;
 
 import android.util.Log;
 
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -9,7 +10,9 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @ParseClassName("Post")
@@ -18,6 +21,7 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_LIKED_BY = "likedBy";
 
     // returns the description of the post
     public String getDescription() {
@@ -48,6 +52,26 @@ public class Post extends ParseObject {
     // set the user for this post
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
+    }
+
+    // getting the list of users who have liked this post
+    public List<ParseUser> getLikedBy() {
+        List<ParseUser> likedBy = getList(KEY_LIKED_BY);
+        if (likedBy == null) {
+            return new ArrayList<>();
+        }
+        return likedBy;
+    }
+
+    // setting the list of users who have liked this post
+    public void setLikedBy(List<ParseUser> users) {
+        put(KEY_LIKED_BY, users);
+    }
+
+    // returns the number of likes as a string
+    public String getLikesCount() {
+        int likeCount = getLikedBy().size();
+        return String.valueOf(likeCount) + ((likeCount == 1) ? " like" : " likes");
     }
 
     // calculating how long ago this post was created

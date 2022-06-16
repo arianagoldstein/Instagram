@@ -17,8 +17,11 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +36,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView tvUsernameDetailsBottom;
     private TextView tvDescriptionDetails;
     private TextView tvCreatedAtDetails;
+    private TextView tvLikesDetails;
 
     private ImageButton ibLikeDetails;
     private ImageButton ibCommentDetails;
@@ -55,6 +59,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         ibLikeDetails = findViewById(R.id.ibLikeDetails);
         ibCommentDetails = findViewById(R.id.ibCommentDetails);
         rvComments = findViewById(R.id.rvComments);
+        tvLikesDetails = findViewById(R.id.tvLikesDetails);
 
         // unwrapping the Parcel so we can populate the details page with this post
         post = getIntent().getParcelableExtra("post");
@@ -63,14 +68,19 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsernameDetailsTop.setText(post.getUser().getUsername());
         tvUsernameDetailsBottom.setText(post.getUser().getUsername());
         tvDescriptionDetails.setText(post.getDescription());
+        tvLikesDetails.setText(post.getLikesCount());
 
+        if (post.getLikedBy().contains(ParseUser.getCurrentUser())) {
+            ibLikeDetails.setBackgroundResource(R.drawable.fullheart);
+        }
+
+        // calculating how long ago this post was created and updating the textview accordingly
         Date createdAt = post.getCreatedAt();
         String timeAgo = Post.calculateTimeAgo(createdAt);
         tvCreatedAtDetails.setText(timeAgo);
 
-        ParseFile image = post.getImage();
-
         // loading the image into the ImageView only if the image isn't null
+        ParseFile image = post.getImage();
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivPostImageDetails);
         }
@@ -91,6 +101,35 @@ public class PostDetailsActivity extends AppCompatActivity {
         rvComments.setAdapter(adapter);
 
         refreshComments();
+
+        // triggers when the user likes this post
+        ibLikeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<ParseUser> likedBy = post.getLikedBy();
+                ParseUser user = ParseUser.getCurrentUser();
+
+                // check if we've already liked this image
+                if (likedBy.contains(user)) {
+                    // need to unlike
+                    likedBy.remove(user);
+                    ibLikeDetails.setBackgroundResource(R.drawable.emptyheart);
+                } else {
+                    // need to like
+                    likedBy.add(user);
+                    ibLikeDetails.setBackgroundResource(R.drawable.fullheart);
+                }
+
+                post.setLikedBy(likedBy);
+
+                // uploads new values back to database
+                post.saveInBackground();
+
+                // updating number of likes
+                tvLikesDetails.setText(post.getLikesCount());
+
+            }
+        });
     }
 
     // runs when we come back to the details activity after posting a new comment

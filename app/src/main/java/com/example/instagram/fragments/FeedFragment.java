@@ -91,14 +91,14 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_red_light);
 
         // setting up endless scrolling
-        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryPosts(allPosts.size());
-            }
-        };
-
-        rvPosts.addOnScrollListener(scrollListener);
+//        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//                queryPosts(allPosts.size());
+//            }
+//        };
+//
+//        rvPosts.addOnScrollListener(scrollListener);
     }
 
     // method to query our Parse server to return the most recent 20 posts
