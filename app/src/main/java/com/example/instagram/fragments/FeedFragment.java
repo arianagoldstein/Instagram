@@ -106,8 +106,9 @@ public class FeedFragment extends Fragment {
         // specifying the type of data we want to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
-        // include data referred by user key
+        // include data referred by these keys
         query.include(Post.KEY_USER);
+        query.include(Post.KEY_LIKED_BY);
 
         // limit query to latest 20 items
         query.setLimit(5);
@@ -127,6 +128,7 @@ public class FeedFragment extends Fragment {
                     Log.e(TAG, "Issue getting posts.", e);
                     return;
                 }
+
                 // at this point, we have gotten the posts successfully
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());

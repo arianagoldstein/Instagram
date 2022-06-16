@@ -70,9 +70,12 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDescriptionDetails.setText(post.getDescription());
         tvLikesDetails.setText(post.getLikesCount());
 
-        if (post.getLikedBy().contains(ParseUser.getCurrentUser())) {
+        if (post.isLikedByCurrentUser()) {
             ibLikeDetails.setBackgroundResource(R.drawable.fullheart);
+        } else {
+            ibLikeDetails.setBackgroundResource(R.drawable.emptyheart);
         }
+
 
         // calculating how long ago this post was created and updating the textview accordingly
         Date createdAt = post.getCreatedAt();
@@ -110,13 +113,13 @@ public class PostDetailsActivity extends AppCompatActivity {
                 ParseUser user = ParseUser.getCurrentUser();
 
                 // check if we've already liked this image
-                if (likedBy.contains(user)) {
+                if (post.isLikedByCurrentUser()) {
                     // need to unlike
-                    likedBy.remove(user);
+                    post.unlike();
                     ibLikeDetails.setBackgroundResource(R.drawable.emptyheart);
                 } else {
                     // need to like
-                    likedBy.add(user);
+                    post.like();
                     ibLikeDetails.setBackgroundResource(R.drawable.fullheart);
                 }
 

@@ -1,6 +1,9 @@
 package com.example.instagram;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.parse.Parse;
 import com.parse.ParseClassName;
@@ -13,6 +16,7 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 @ParseClassName("Post")
@@ -72,6 +76,38 @@ public class Post extends ParseObject {
     public String getLikesCount() {
         int likeCount = getLikedBy().size();
         return String.valueOf(likeCount) + ((likeCount == 1) ? " like" : " likes");
+    }
+
+    // returns true if the currently logged in user has liked this post
+    public boolean isLikedByCurrentUser() {
+        List<ParseUser> likedBy = getLikedBy();
+        for (int i = 0; i < likedBy.size(); i++) {
+            if (likedBy.get(i).hasSameId(ParseUser.getCurrentUser())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // function to UNLIKE this post by the user who is currently logged in
+    public void unlike() {
+        List<ParseUser> likedBy = getLikedBy();
+        for (int i = 0; i < likedBy.size(); i++) {
+            if (likedBy.get(i).hasSameId(ParseUser.getCurrentUser())) {
+                likedBy.remove(i);
+            }
+        }
+        setLikedBy(likedBy);
+        saveInBackground();
+    }
+
+    // function to LIKE this post by the user who is currently logged in
+    public void like() {
+        unlike();
+        List<ParseUser> likedBy = getLikedBy();
+        likedBy.add(ParseUser.getCurrentUser());
+        setLikedBy(likedBy);
+        saveInBackground();
     }
 
     // calculating how long ago this post was created

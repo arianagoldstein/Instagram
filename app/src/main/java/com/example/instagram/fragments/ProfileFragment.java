@@ -20,6 +20,7 @@ public class ProfileFragment extends FeedFragment {
 
         // include data referred by user key
         query.include(Post.KEY_USER);
+        query.include(Post.KEY_LIKED_BY);
 
         // limit query to latest 20 items
         query.setLimit(20);
