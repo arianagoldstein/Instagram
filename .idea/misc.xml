@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/compose_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/home_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/profile_icon.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_comment.xml" value="0.2923076923076923" />
         <entry key="app/src/main/res/layout/activity_compose.xml" value="0.146596442328559" />
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.1" />
