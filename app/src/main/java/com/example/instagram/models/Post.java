@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.models;
 
 import android.os.Build;
 import android.util.Log;
@@ -49,8 +49,8 @@ public class Post extends ParseObject {
     }
 
     // get the user that created this post
-    public ParseUser getUser() {
-        return getParseUser(KEY_USER);
+    public User getUser() {
+        return (User) getParseUser(KEY_USER);
     }
 
     // set the user for this post
@@ -103,7 +103,7 @@ public class Post extends ParseObject {
 
     // function to LIKE this post by the user who is currently logged in
     public void like() {
-        unlike();
+        // unlike();
         List<ParseUser> likedBy = getLikedBy();
         likedBy.add(ParseUser.getCurrentUser());
         setLikedBy(likedBy);

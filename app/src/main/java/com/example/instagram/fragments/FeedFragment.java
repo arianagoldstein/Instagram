@@ -14,9 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.instagram.EndlessRecyclerViewScrollListener;
-import com.example.instagram.Post;
-import com.example.instagram.PostsAdapter;
+import com.example.instagram.utility.EndlessRecyclerViewScrollListener;
+import com.example.instagram.models.Post;
+import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -33,8 +33,6 @@ public class FeedFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
-
-    private EndlessRecyclerViewScrollListener scrollListener;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -83,9 +81,6 @@ public class FeedFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(llm);
 
-//        // query posts from the database
-//        queryPosts(0);
-
         // setting up refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -100,15 +95,6 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // setting up endless scrolling
-//        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                queryPosts(allPosts.size());
-//            }
-//        };
-//
-//        rvPosts.addOnScrollListener(scrollListener);
     }
 
     // method to query our Parse server to return the most recent 20 posts
@@ -121,7 +107,7 @@ public class FeedFragment extends Fragment {
         query.include(Post.KEY_LIKED_BY);
 
         // limit query to latest 20 items
-        query.setLimit(5);
+        query.setLimit(20);
         query.setSkip(i);
 
         // order posts by the order they were created with the newest first

@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24"
+        app:srcCompat="@drawable/profile_outline"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -32,7 +32,7 @@
     <ImageView
         android:id="@+id/ivPostImageDetails"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImageDetails"
@@ -58,7 +58,7 @@
         android:layout_marginTop="32dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintHorizontal_bias="0.031"
         app:layout_constraintStart_toEndOf="@+id/tvUsernameDetailsBottom"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutDetails" />
 
@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvComments" />
@@ -143,7 +143,7 @@
         android:id="@+id/rvComments"
         android:layout_width="412dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDetails" />

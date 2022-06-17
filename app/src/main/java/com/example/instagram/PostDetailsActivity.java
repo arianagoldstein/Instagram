@@ -13,15 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.adapters.CommentsAdapter;
+import com.example.instagram.models.Comment;
+import com.example.instagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     public static final String TAG = "PostDetailsActivity";
 
-    private ImageView ivProfileImage;
+    private ImageView ivProfileImageDetails;
     private TextView tvUsernameDetailsTop;
     private ImageView ivPostImageDetails;
     private TextView tvUsernameDetailsBottom;
@@ -60,6 +59,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         ibCommentDetails = findViewById(R.id.ibCommentDetails);
         rvComments = findViewById(R.id.rvComments);
         tvLikesDetails = findViewById(R.id.tvLikesDetails);
+        ivProfileImageDetails = findViewById(R.id.ivProfileImageDetails);
 
         // unwrapping the Parcel so we can populate the details page with this post
         post = getIntent().getParcelableExtra("post");
@@ -69,6 +69,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsernameDetailsBottom.setText(post.getUser().getUsername());
         tvDescriptionDetails.setText(post.getDescription());
         tvLikesDetails.setText(post.getLikesCount());
+
+        ParseFile profilePic = post.getUser().getParseFile("profilePic");
+        Glide.with(this).load(profilePic.getUrl())
+                .circleCrop()
+                .into(ivProfileImageDetails);
 
         if (post.isLikedByCurrentUser()) {
             ibLikeDetails.setBackgroundResource(R.drawable.fullheart);

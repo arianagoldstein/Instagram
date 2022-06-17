@@ -5,17 +5,24 @@
       <map>
         <entry key="app/src/main/res/drawable/compose_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/login_gradient.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/profile_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.103" />
+        <entry key="app/src/main/res/drawable/rounded_corners_login_buttons.xml" value="0.115" />
+        <entry key="app/src/main/res/drawable/rounded_corners_login_fields.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_comment.xml" value="0.2923076923076923" />
         <entry key="app/src/main/res/layout/activity_compose.xml" value="0.146596442328559" />
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.22063140869140627" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.18571929931640627" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.23380737304687502" />
         <entry key="app/src/main/res/layout/activity_post_details.xml" value="0.26650125009042236" />
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_feed.xml" value="0.23796296296296296" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.3047124226888021" />
         <entry key="app/src/main/res/layout/item_comment.xml" value="0.29128205128205126" />
-        <entry key="app/src/main/res/layout/item_post.xml" value="0.21640167236328123" />
+        <entry key="app/src/main/res/layout/item_post.xml" value="0.27806221030718214" />
+        <entry key="app/src/main/res/layout/item_post_profile.xml" value="0.2786458333333333" />
+        <entry key="app/src/main/res/layout/toolbar_main.xml" value="0.3385416666666667" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/xml/fileprovider.xml" value="0.16944444444444445" />
       </map>

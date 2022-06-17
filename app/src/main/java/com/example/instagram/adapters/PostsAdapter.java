@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.instagram.MainActivity;
+import com.example.instagram.PostDetailsActivity;
+import com.example.instagram.R;
+import com.example.instagram.models.Post;
 import com.parse.ParseFile;
 
-import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
+import java.util.Date;
 import java.util.List;
 
 // this class will allow us to populate the recyclerview with posts
@@ -75,6 +81,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvDescription;
         private TextView tvLikesFeed;
         private ImageButton ibLikeFeed;
+        private TextView tvCreatedAtFeed;
+        private TextView tvUsernameFeedBottom;
+        private ImageView ivProfileImageFeed;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +92,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvLikesFeed = itemView.findViewById(R.id.tvLikesFeed);
             ibLikeFeed = itemView.findViewById(R.id.ibLikeFeed);
+            tvCreatedAtFeed = itemView.findViewById(R.id.tvCreatedAtFeed);
+            ivProfileImageFeed = itemView.findViewById(R.id.ivProfileImageFeed);
+            tvUsernameFeedBottom = itemView.findViewById(R.id.tvUsernameFeedBottom);
 
             itemView.setOnClickListener(this);
         }
@@ -92,6 +104,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
             tvLikesFeed.setText(post.getLikesCount());
+            tvUsernameFeedBottom.setText(post.getUser().getUsername());
+
+            Date createdAt = post.getCreatedAt();
+            String timeAgo = Post.calculateTimeAgo(createdAt);
+            tvCreatedAtFeed.setText(timeAgo);
 
             if (post.isLikedByCurrentUser()) {
                 ibLikeFeed.setBackgroundResource(R.drawable.fullheart);
@@ -106,9 +123,24 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
 
+            // displaying the user's profile picture above their post
+            ParseFile profilePic = post.getUser().getParseFile("profilePic");
+            Glide.with(context).load(profilePic.getUrl())
+                    .circleCrop()
+                    .into(ivProfileImageFeed);
+
+            // if you click on someone else's profile picture, you can view their profile
+            ivProfileImageFeed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity activity = (MainActivity) context;
+                    activity.goToProfileFragment(post.getUser());
+                }
+            });
         }
 
 
+        // clicking on a post brings you to that post's details page
         @Override
         public void onClick(View view) {
             // get item position
