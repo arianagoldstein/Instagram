@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, "Attempting to sign up user " + username);
 
         // creating a new user to add to the database
-        ParseUser user = new ParseUser();
-        // User user = new User();
+        // ParseUser user = new ParseUser();
+        User user = new User();
         user.setUsername(username);
         user.setPassword(password);
 

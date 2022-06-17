@@ -34,8 +34,6 @@ public class FeedFragment extends Fragment {
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
 
-    private EndlessRecyclerViewScrollListener scrollListener;
-
     public FeedFragment() {
         // Required empty public constructor
     }
@@ -83,9 +81,6 @@ public class FeedFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(llm);
 
-//        // query posts from the database
-//        queryPosts(0);
-
         // setting up refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -100,15 +95,6 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // setting up endless scrolling
-//        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                queryPosts(allPosts.size());
-//            }
-//        };
-//
-//        rvPosts.addOnScrollListener(scrollListener);
     }
 
     // method to query our Parse server to return the most recent 20 posts

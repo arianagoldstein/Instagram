@@ -22,18 +22,16 @@ The following **stretch** features are implemented:
 
 - [x] Style the login page to look like the real Instagram login page.
 - [x] Style the feed to look like the real Instagram feed.
-- [ ] User can load more posts once they reach the bottom of the feed using endless scrolling.
 - [x] User should switch between different tabs using fragments and a Bottom Navigation View.
     - [x] Feed Tab (to view all posts from all users)
     - [x] Capture Tab (to make a new post using the Camera and Photo Gallery)
     - [x] Profile Tab (to view only the current user's posts, in a grid)
 - [x] Show the username and creation time for each post
 - User Profiles:
-    - [ ] Allow the logged in user to add a profile photo
+    - [x] Allow the logged in user to add a profile photo
     - [x] Display the profile photo with each post
-    - [ ] Tapping on a post's username or profile photo goes to that user's profile page
+    - [x] Tapping on a post's username or profile photo goes to that user's profile page
     - [x] User Profile shows posts in a grid
-- [ ] After the user submits a new post, show an indeterminate progress bar while the post is being uploaded to Parse
 - [x] User can comment on a post and see all comments for each post in the post details screen.
 - [x] User can like a post and see number of likes for each post in the post details screen.
 
@@ -41,7 +39,8 @@ The following **stretch** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-[Walkthrough](https://getkap.co/)
+[Walkthrough for a new user signing up](https://imgur.com/a/Uv2ZPQr)
+[Walkthrough for an existing user logging in](https://imgur.com/a/cPJTa2y)
 
 GIF created with [Kap](https://getkap.co/).
 
