@@ -1,5 +1,8 @@
 package com.example.instagram.fragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,22 +21,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.instagram.models.User;
+import com.example.instagram.utility.BitmapScaler;
 import com.example.instagram.utility.EndlessRecyclerViewScrollListener;
 import com.example.instagram.models.Post;
 import com.example.instagram.adapters.ProfileAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends BaseFragment {
     public static final String TAG = "ProfileFragment";
 
+    // declaring elements in layout
     ParseUser userToFilterBy;
     RecyclerView rvProfile;
     ProfileAdapter adapter;
@@ -45,6 +53,10 @@ public class ProfileFragment extends Fragment {
     ImageView ivProfileImageProfile;
     TextView tvBio;
 
+    // storing the current User
+    User user = (User) ParseUser.getCurrentUser();
+
+    // constructor
     public ProfileFragment(ParseUser userToFilterBy) {
         this.userToFilterBy = userToFilterBy;
     }
@@ -85,18 +97,6 @@ public class ProfileFragment extends Fragment {
         tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
         tvBio = view.findViewById(R.id.tvBio);
 
-        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
-
-        // populating the bio field
-        // User user = (User) (ParseUser.getCurrentUser());
-        // Log.i(TAG, "Bio: " + user.getBio());
-        tvBio.setText("hello world");
-
-        ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
-        Glide.with(this).load(profilePic.getUrl())
-                .circleCrop()
-                .into(ivProfileImageProfile);
-
         // set the layout manager on the recyclerview
         rvProfile.setLayoutManager(gridLayoutManager);
 
@@ -114,8 +114,46 @@ public class ProfileFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        // getting all the user info from parse
+//        user.fetchInBackground(new GetCallback<ParseObject>() {
+//            @Override
+//            public void done(ParseObject object, ParseException e) {
+//                user = (User) object;
+//
+//                // calling function to display user information
+//                displayUserInfo();
+//            }
+//        });
+
+        // querying the posts created by the logged-in user
         queryPosts(0);
 
+        // creating an onclick listener for the profile image
+        // when we click on it, we should be able to update it
+        ivProfileImageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCamera();
+            }
+        });
+
+        // calling function to display user information
+        displayUserInfo();
+
+    }
+
+    // function that displays the user's username, bio, and profile picture
+    private void displayUserInfo() {
+        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
+
+        // populating the bio field
+        tvBio.setText(user.getBio());
+
+        //ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+        ParseFile profilePic = user.getProfilePic();
+        Glide.with(this).load(profilePic.getUrl())
+                .circleCrop()
+                .into(ivProfileImageProfile);
     }
 
     // method to query our Parse server to return the most recent 20 posts
@@ -162,4 +200,32 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
+    // getting the image back from the user
+    // invoked when the camera app returns to the Instagram application
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // if the photo capture was successful, we can load the image onto the page as a preview for the user
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // by this point we have the camera photo on disk
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+                // load the taken image into a preview
+                Glide.with(this).load(takenImage).circleCrop().into(ivProfileImageProfile);
+
+                // constructing a new file and saving it to the database
+                ParseFile newPic = new ParseFile(photoFile);
+                user.setProfilePic(newPic);
+                user.saveInBackground();
+
+            } else { // result was a failure
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

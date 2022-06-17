@@ -34,19 +34,14 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 
-public class ComposeFragment extends Fragment {
+public class ComposeFragment extends BaseFragment {
 
     public static final String TAG = "ComposeFragment";
 
-    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-    private static final int RESULT_OK = -1;
-    private Button btnLogout;
     private EditText etDescription;
     private Button btnCaptureImage;
     private ImageView ivPostImage;
     private Button btnSubmit;
-    private File photoFile;
-    public String photoFileName;
 
     MainActivity mainActivity;
 
@@ -74,23 +69,10 @@ public class ComposeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnLogout = view.findViewById(R.id.btnLogout);
         etDescription = view.findViewById(R.id.etDescription);
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImageCompose);
         btnSubmit = view.findViewById(R.id.btnSubmit);
-
-        // setting a listener for the logout button
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick logout button");
-                ParseUser.logOut();
-                Intent i = new Intent(getContext(), LoginActivity.class);
-                startActivity(i);
-            }
-        });
-
 
         // setting a listener for the submit button to create a post
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -127,31 +109,6 @@ public class ComposeFragment extends Fragment {
 
     }
 
-    // launches implicit intent to open the phone's camera and take a photo for the post
-    private void launchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // Create a File reference for future access
-        photoFile = getPhotoFileUri(photoFileName);
-
-        // simply specifying a file to write to can lead to a lot of concern if the app that will be using the file
-        // can't access the file
-
-        // wrap File object into a content provider, make our application a file provider
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.ParseApplication", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        // checking if there is an app on this phone that can handle this intent
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            Log.i(TAG, "Going to phone camera app to take a picture");
-            // start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        } else {
-            Log.e(TAG, "Could not go to camera app.");
-        }
-    }
-
     // getting the image back from the user
     // invoked when the camera app returns to the Instagram application
     @Override
@@ -173,22 +130,6 @@ public class ComposeFragment extends Fragment {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    // helper function to get a URI for the image file
-    private File getPhotoFileUri(String fileName) {
-
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-        return file;
     }
 
     private void savePost(String description, ParseUser currentUser, File photoFile) {

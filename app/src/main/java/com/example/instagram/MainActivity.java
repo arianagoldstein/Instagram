@@ -6,8 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.instagram.fragments.ComposeFragment;
@@ -21,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private BottomNavigationView bottomNavigationView;
+    private Button btnLogout;
 
     // setting up fragments
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -30,9 +35,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // logout button
+        btnLogout = findViewById(R.id.btnLogout);
+        // setting a listener for the logout button
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick logout button");
+                ParseUser.logOut();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
         // top toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.smaller_logo);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         // bottom navbar
         bottomNavigationView = findViewById(R.id.bottom_navigation);
