@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.models;
 
 import android.os.Build;
 import android.util.Log;

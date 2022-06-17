@@ -5,19 +5,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.instagram.EndlessRecyclerViewScrollListener;
-import com.example.instagram.Post;
-import com.example.instagram.PostsAdapter;
-import com.example.instagram.ProfileAdapter;
+import com.example.instagram.utility.EndlessRecyclerViewScrollListener;
+import com.example.instagram.models.Post;
+import com.example.instagram.adapters.ProfileAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -36,6 +35,8 @@ public class ProfileFragment extends Fragment {
     List<Post> allPosts;
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
+    TextView tvNumPostsNum;
+    int numPostsByThisUser;
 
     public ProfileFragment(ParseUser userToFilterBy) {
         this.userToFilterBy = userToFilterBy;
@@ -72,6 +73,7 @@ public class ProfileFragment extends Fragment {
 
         // looking up views in the layout
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        tvNumPostsNum = view.findViewById(R.id.tvNumPostsNum);
 
         // set the layout manager on the recyclerview
         rvProfile.setLayoutManager(gridLayoutManager);
@@ -126,6 +128,9 @@ public class ProfileFragment extends Fragment {
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+
+                numPostsByThisUser = posts.size();
+                tvNumPostsNum.setText(String.valueOf(numPostsByThisUser));
 
                 // save these posts to the list and notify the adapter to update
                 allPosts.clear();

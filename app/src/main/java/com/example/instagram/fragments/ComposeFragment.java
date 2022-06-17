@@ -22,10 +22,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.instagram.BitmapScaler;
+import com.example.instagram.utility.BitmapScaler;
 import com.example.instagram.LoginActivity;
 import com.example.instagram.MainActivity;
-import com.example.instagram.Post;
+import com.example.instagram.models.Post;
 import com.example.instagram.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;

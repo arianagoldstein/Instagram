@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24"
+        app:srcCompat="@drawable/profile_outline"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -32,7 +32,7 @@
     <ImageView
         android:id="@+id/ivPostImageDetails"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImageDetails"

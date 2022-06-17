@@ -13,15 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.adapters.CommentsAdapter;
+import com.example.instagram.models.Comment;
+import com.example.instagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;

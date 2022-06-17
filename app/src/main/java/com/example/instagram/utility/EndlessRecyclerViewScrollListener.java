@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.utility;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;

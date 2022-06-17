@@ -1,7 +1,6 @@
-package com.example.instagram;
+package com.example.instagram.adapters;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.instagram.R;
+import com.example.instagram.models.Comment;
 
 import java.util.ArrayList;
 
