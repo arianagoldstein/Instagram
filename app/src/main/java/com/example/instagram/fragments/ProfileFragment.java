@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +42,6 @@ public class ProfileFragment extends BaseFragment {
     public static final String TAG = "ProfileFragment";
 
     // declaring elements in layout
-    ParseUser userToFilterBy;
     RecyclerView rvProfile;
     ProfileAdapter adapter;
     List<Post> allPosts;
@@ -52,14 +52,13 @@ public class ProfileFragment extends BaseFragment {
     int numPostsByThisUser;
     ImageView ivProfileImageProfile;
     TextView tvBio;
+    Button btnFollow;
 
     // storing the current User
-    User user = (User) ParseUser.getCurrentUser();
+    public User user = (User) ParseUser.getCurrentUser();
 
     // constructor
-    public ProfileFragment(ParseUser userToFilterBy) {
-        this.userToFilterBy = userToFilterBy;
-    }
+    public ProfileFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +86,7 @@ public class ProfileFragment extends BaseFragment {
         adapter = new ProfileAdapter(getContext(), allPosts);
         rvProfile.setAdapter(adapter);
 
+        // creating grid layout for images on the profile
         int numberOfColumns = 3;
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns);
 
@@ -96,6 +96,7 @@ public class ProfileFragment extends BaseFragment {
         ivProfileImageProfile = view.findViewById(R.id.ivProfileImageProfile);
         tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
         tvBio = view.findViewById(R.id.tvBio);
+        btnFollow = view.findViewById(R.id.btnFollow);
 
         // set the layout manager on the recyclerview
         rvProfile.setLayoutManager(gridLayoutManager);
@@ -113,17 +114,6 @@ public class ProfileFragment extends BaseFragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        // getting all the user info from parse
-//        user.fetchInBackground(new GetCallback<ParseObject>() {
-//            @Override
-//            public void done(ParseObject object, ParseException e) {
-//                user = (User) object;
-//
-//                // calling function to display user information
-//                displayUserInfo();
-//            }
-//        });
 
         // querying the posts created by the logged-in user
         queryPosts(0);
@@ -144,16 +134,22 @@ public class ProfileFragment extends BaseFragment {
 
     // function that displays the user's username, bio, and profile picture
     private void displayUserInfo() {
-        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
-
-        // populating the bio field
+        // populating the username and bio fields
+        tvUsernameProfile.setText(user.getUsername());
         tvBio.setText(user.getBio());
 
-        //ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+        // populating the profile picture
         ParseFile profilePic = user.getProfilePic();
         Glide.with(this).load(profilePic.getUrl())
                 .circleCrop()
                 .into(ivProfileImageProfile);
+
+        // displaying follow button if this is not the logged-in user's profile
+        if (user != (User)(ParseUser.getCurrentUser())) {
+            btnFollow.setVisibility(View.VISIBLE);//makes it disappear
+        } else {
+            btnFollow.setVisibility(View.GONE);//makes it disappear
+        }
     }
 
     // method to query our Parse server to return the most recent 20 posts
@@ -163,7 +159,7 @@ public class ProfileFragment extends BaseFragment {
 
         // include data referred by these keys
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, userToFilterBy);
+        query.whereEqualTo(Post.KEY_USER, user);
 
         // limit query to latest 20 items
         query.setLimit(20);
@@ -189,6 +185,7 @@ public class ProfileFragment extends BaseFragment {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
 
+                // displaying the number of posts created by this user
                 numPostsByThisUser = posts.size();
                 tvNumPostsNum.setText(String.valueOf(numPostsByThisUser));
 

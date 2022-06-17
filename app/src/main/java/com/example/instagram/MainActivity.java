@@ -17,14 +17,22 @@ import android.widget.Toast;
 import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.fragments.FeedFragment;
 import com.example.instagram.fragments.ProfileFragment;
+import com.example.instagram.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+// main activity where each of the 3 fragments will be accessible via the bottom navigation bar
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    private BottomNavigationView bottomNavigationView;
+
+    FeedFragment feedFragment = new FeedFragment();
+    ComposeFragment composeFragment = new ComposeFragment(MainActivity.this);
+    ProfileFragment profileFragment = new ProfileFragment();
+
+    // declaring items in layout
+    public BottomNavigationView bottomNavigationView;
     private Button btnLogout;
 
     // setting up fragments
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         // logout button
         btnLogout = findViewById(R.id.btnLogout);
+
         // setting a listener for the logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         // top toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.smaller_logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
@@ -61,16 +69,18 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // determining which fragment to display based on which item is selected
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.action_feed:
-                        fragment = new FeedFragment();
+                        fragment = feedFragment;
                         break;
                     case R.id.action_compose:
-                        fragment = new ComposeFragment(MainActivity.this);
+                        fragment = composeFragment;
                         break;
                     case R.id.action_profile:
-                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
+                        profileFragment.user = (User) ParseUser.getCurrentUser();
+                        fragment = profileFragment;
                         break;
                     default:
                         fragment = new FeedFragment();
@@ -81,11 +91,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        // Set default selection
+        // set default selection to feed
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
     }
 
+    // brings user to Feed tab
     public void goToFeedFragment() {
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
     }
+
+    // brings user to Profile tab
+    public void goToProfileFragment(User user) {
+        // indicating which user's profile we want to view on the profile tab
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        profileFragment.user = user;
+    }
+
 }
