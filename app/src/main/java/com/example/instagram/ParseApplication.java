@@ -10,8 +10,9 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // registering Post subclass
+        // registering Post and Comment subclasses
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Comment.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.application_id))
