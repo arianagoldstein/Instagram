@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagram.PostDetailsActivity;
 import com.example.instagram.R;
 import com.example.instagram.models.Post;
@@ -121,6 +122,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
 
+            ParseFile profilePic = post.getUser().getParseFile("profilePic");
+            Glide.with(context).load(profilePic.getUrl())
+                    .circleCrop()
+                    .into(ivProfileImageFeed);
         }
 
 

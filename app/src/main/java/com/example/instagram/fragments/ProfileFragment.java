@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,12 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.example.instagram.models.User;
 import com.example.instagram.utility.EndlessRecyclerViewScrollListener;
 import com.example.instagram.models.Post;
 import com.example.instagram.adapters.ProfileAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -36,7 +40,10 @@ public class ProfileFragment extends Fragment {
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
     TextView tvNumPostsNum;
+    TextView tvUsernameProfile;
     int numPostsByThisUser;
+    ImageView ivProfileImageProfile;
+    TextView tvBio;
 
     public ProfileFragment(ParseUser userToFilterBy) {
         this.userToFilterBy = userToFilterBy;
@@ -74,6 +81,18 @@ public class ProfileFragment extends Fragment {
         // looking up views in the layout
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         tvNumPostsNum = view.findViewById(R.id.tvNumPostsNum);
+        ivProfileImageProfile = view.findViewById(R.id.ivProfileImageProfile);
+        tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
+        tvBio = view.findViewById(R.id.tvBio);
+
+        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
+        // Log.i(TAG, "Bio: " + ((User) (ParseUser.getCurrentUser())).getBio());
+        tvBio.setText("hello");
+
+        ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+        Glide.with(this).load(profilePic.getUrl())
+                .circleCrop()
+                .into(ivProfileImageProfile);
 
         // set the layout manager on the recyclerview
         rvProfile.setLayoutManager(gridLayoutManager);

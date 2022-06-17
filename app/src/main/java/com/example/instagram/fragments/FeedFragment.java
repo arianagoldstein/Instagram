@@ -121,7 +121,7 @@ public class FeedFragment extends Fragment {
         query.include(Post.KEY_LIKED_BY);
 
         // limit query to latest 20 items
-        query.setLimit(5);
+        query.setLimit(20);
         query.setSkip(i);
 
         // order posts by the order they were created with the newest first

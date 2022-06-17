@@ -29,7 +29,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     public static final String TAG = "PostDetailsActivity";
 
-    private ImageView ivProfileImage;
+    private ImageView ivProfileImageDetails;
     private TextView tvUsernameDetailsTop;
     private ImageView ivPostImageDetails;
     private TextView tvUsernameDetailsBottom;
@@ -59,6 +59,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         ibCommentDetails = findViewById(R.id.ibCommentDetails);
         rvComments = findViewById(R.id.rvComments);
         tvLikesDetails = findViewById(R.id.tvLikesDetails);
+        ivProfileImageDetails = findViewById(R.id.ivProfileImageDetails);
 
         // unwrapping the Parcel so we can populate the details page with this post
         post = getIntent().getParcelableExtra("post");
@@ -68,6 +69,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsernameDetailsBottom.setText(post.getUser().getUsername());
         tvDescriptionDetails.setText(post.getDescription());
         tvLikesDetails.setText(post.getLikesCount());
+
+        ParseFile profilePic = post.getUser().getParseFile("profilePic");
+        Glide.with(this).load(profilePic.getUrl())
+                .circleCrop()
+                .into(ivProfileImageDetails);
 
         if (post.isLikedByCurrentUser()) {
             ibLikeDetails.setBackgroundResource(R.drawable.fullheart);
