@@ -103,7 +103,7 @@ public class Post extends ParseObject {
 
     // function to LIKE this post by the user who is currently logged in
     public void like() {
-        unlike();
+        // unlike();
         List<ParseUser> likedBy = getLikedBy();
         likedBy.add(ParseUser.getCurrentUser());
         setLikedBy(likedBy);

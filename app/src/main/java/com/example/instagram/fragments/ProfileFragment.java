@@ -86,8 +86,11 @@ public class ProfileFragment extends Fragment {
         tvBio = view.findViewById(R.id.tvBio);
 
         tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
-        // Log.i(TAG, "Bio: " + ((User) (ParseUser.getCurrentUser())).getBio());
-        tvBio.setText("hello");
+
+        // populating the bio field
+        // User user = (User) (ParseUser.getCurrentUser());
+        // Log.i(TAG, "Bio: " + user.getBio());
+        tvBio.setText("hello world");
 
         ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
         Glide.with(this).load(profilePic.getUrl())
